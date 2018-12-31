@@ -7,11 +7,13 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 import java.util.UUID.randomUUID
@@ -68,7 +70,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                     SensorManager.SENSOR_DELAY_NORMAL
                 )
 
-                //createFile(this.currentActivity.text)
+                createFile(this.currentActivity.text)
             }
         }
 
@@ -85,34 +87,39 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val uuid = randomUUID().toString()
         val replace = activity.replace("\\s".toRegex(), "")
         val filename = "${replace}_$uuid.csv"
-        textView.text = filename
+        textView.text = Environment.getExternalStorageDirectory().toString()
 
-//        val fileContents = "Hello world!"
-        val fileWriter = FileWriter(filename)
-        try {
-            fileWriter.append(CSV_HEADER)
-            fileWriter.append('\n')
-
-            //for (customer in customers) {
-                fileWriter.append("Hello world!")
-                fileWriter.append('\n')
-            //}
-
-            println("Write CSV successfully!")
-        } catch (e: Exception) {
-            println("Writing CSV error!")
-            e.printStackTrace()
-        } finally {
-            try {
-                fileWriter.flush()
-                fileWriter.close()
-            } catch (e: IOException) {
-                println("Flushing/closing error!")
-                e.printStackTrace()
-            }
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            val fileContents = "Hello world!" //Prueba!!!!
         }
-//        context.openFileOutput(filename, Context.MODE_PRIVATE).use {
-//            it.write(fileContents.toByteArray())
+
+
+
+//        var fileWriter : FileWriter? = null
+//        try {
+//            val file = File(this.applicationContext.filesDir.toString(), filename)
+//            fileWriter = FileWriter(file)
+//            fileWriter.append(CSV_HEADER)
+//            fileWriter.append('\n')
+//
+//            //for (customer in customers) {
+//                fileWriter.append("Hello world!")
+//                fileWriter.append('\n')
+//            //}
+//
+//            println("Write CSV successfully!")
+//        } catch (e: Exception) {
+//            println("Writing CSV error!")
+//            e.printStackTrace()
+//        } finally {
+//            try {
+//                fileWriter!!.flush()
+//                fileWriter.close()
+//            } catch (e: IOException) {
+//                println("Flushing/closing error!")
+//                e.printStackTrace()
+//            }
 //        }
+
     }
 }
