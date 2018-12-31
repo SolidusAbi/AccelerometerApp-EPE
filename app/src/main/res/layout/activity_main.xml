@@ -42,14 +42,18 @@
                 android:id="@+id/radioActivityGroup">
 
                 <RadioButton
-                        android:text="RadioButton_0"
+                        android:text="Caminar"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:id="@+id/radioButton5" android:layout_weight="1"
+                        android:layout_height="wrap_content" android:id="@+id/radioButton0" android:layout_weight="1"
                         />
                 <RadioButton
-                        android:text="RadioButton_1"
+                        android:text="Correr"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:id="@+id/radioButton4" android:layout_weight="1"/>
+                        android:layout_height="wrap_content" android:id="@+id/radioButton1" android:layout_weight="1"/>
+                <RadioButton
+                        android:text="Subir Escaleras"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/radioButton2" android:layout_weight="1"/>
 
         </RadioGroup>
         <LinearLayout

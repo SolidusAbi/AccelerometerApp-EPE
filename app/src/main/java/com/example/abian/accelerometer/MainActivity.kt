@@ -12,7 +12,11 @@ import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
+import java.io.FileWriter
+import java.io.IOException
+import java.util.UUID.randomUUID
+
+
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
 
@@ -23,6 +27,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     lateinit var stopButton: Button
 
     lateinit var sensorManager: SensorManager
+
+    private val CSV_HEADER = "x,y,z"
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
 
@@ -42,6 +48,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         this.startButton = findViewById(R.id.startButton)
         this.stopButton = findViewById(R.id.stopButton)
 
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
         this.startButton.setOnClickListener{
             var result = ""
             var checkedValue : Int = radioActivityGroup.checkedRadioButtonId
@@ -52,32 +60,59 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 this.stopButton.isEnabled = true
 
                 result += "Selected ${this.currentActivity.text}"
-                /*if (findViewById<RadioButton>(R.id.radioButton4).isChecked)
-                    result += radioActivityGroup.checkedRadioButtonId
-                if (findViewById<RadioButton>(R.id.radioButton5).isChecked)
-                    result += 2*/
-
                 textView.text = result
+
+                sensorManager.registerListener(
+                    this,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL
+                )
+
+                //createFile(this.currentActivity.text)
             }
         }
 
         this.stopButton.setOnClickListener{
             this.startButton.isEnabled = true
             this.stopButton.isEnabled = false
+
+            sensorManager.unregisterListener(this)
+            accelerometer_data.text = "Hello World"
         }
+    }
 
+    fun createFile(activity: CharSequence){
+        val uuid = randomUUID().toString()
+        val replace = activity.replace("\\s".toRegex(), "")
+        val filename = "${replace}_$uuid.csv"
+        textView.text = filename
 
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensorManager.registerListener(
-            this,
-            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-            SensorManager.SENSOR_DELAY_NORMAL
-        )
+//        val fileContents = "Hello world!"
+        val fileWriter = FileWriter(filename)
+        try {
+            fileWriter.append(CSV_HEADER)
+            fileWriter.append('\n')
 
-        /*val filename = "myfile"
-        val fileContents = "Hello world!"
-        context.openFileOutput(filename, Context.MODE_PRIVATE).use {
-            it.write(fileContents.toByteArray())
-        }*/
+            //for (customer in customers) {
+                fileWriter.append("Hello world!")
+                fileWriter.append('\n')
+            //}
+
+            println("Write CSV successfully!")
+        } catch (e: Exception) {
+            println("Writing CSV error!")
+            e.printStackTrace()
+        } finally {
+            try {
+                fileWriter.flush()
+                fileWriter.close()
+            } catch (e: IOException) {
+                println("Flushing/closing error!")
+                e.printStackTrace()
+            }
+        }
+//        context.openFileOutput(filename, Context.MODE_PRIVATE).use {
+//            it.write(fileContents.toByteArray())
+//        }
     }
 }
