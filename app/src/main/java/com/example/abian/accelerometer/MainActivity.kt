@@ -1,6 +1,7 @@
 package com.example.abian.accelerometer
 
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -8,16 +9,14 @@ import android.hardware.SensorManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.view.View
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.RadioButton
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.UUID.randomUUID
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
-import java.util.UUID.randomUUID
-
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -27,6 +26,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     lateinit var startButton: Button
     lateinit var stopButton: Button
+    lateinit var sendEmailButton: Button
 
     lateinit var sensorManager: SensorManager
 
@@ -49,8 +49,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         this.radioActivityGroup = findViewById(R.id.radioActivityGroup)
         this.startButton = findViewById(R.id.startButton)
         this.stopButton = findViewById(R.id.stopButton)
+        this.sendEmailButton = findViewById(R.id.sendEmailButton)
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
+        val file = File(this.applicationContext.filesDir.toString()).listFiles()
+        val prueba = file.size
 
         this.startButton.setOnClickListener{
             var result = ""
@@ -81,6 +85,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             sensorManager.unregisterListener(this)
             accelerometer_data.text = "Hello World"
         }
+
+        this.sendEmailButton.setOnClickListener{
+            val intent: Intent = Intent( this, SendFilesActivity::class.java)
+            this.startActivity(intent)
+        }
     }
 
     fun createFile(activity: CharSequence){
@@ -95,31 +104,32 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
 
 
-//        var fileWriter : FileWriter? = null
-//        try {
-//            val file = File(this.applicationContext.filesDir.toString(), filename)
-//            fileWriter = FileWriter(file)
-//            fileWriter.append(CSV_HEADER)
-//            fileWriter.append('\n')
-//
-//            //for (customer in customers) {
-//                fileWriter.append("Hello world!")
-//                fileWriter.append('\n')
-//            //}
-//
-//            println("Write CSV successfully!")
-//        } catch (e: Exception) {
-//            println("Writing CSV error!")
-//            e.printStackTrace()
-//        } finally {
-//            try {
-//                fileWriter!!.flush()
-//                fileWriter.close()
-//            } catch (e: IOException) {
-//                println("Flushing/closing error!")
-//                e.printStackTrace()
-//            }
-//        }
+        var fileWriter : FileWriter? = null
+        try {
+            val file = File(this.applicationContext.filesDir.toString(), filename)
+            fileWriter = FileWriter(file)
+            fileWriter.append(CSV_HEADER)
+            fileWriter.append('\n')
 
+            //for (customer in customers) {
+                fileWriter.append("Hello world!")
+                fileWriter.append('\n')
+            //}
+
+            println("Write CSV successfully!")
+        } catch (e: Exception) {
+            println("Writing CSV error!")
+            e.printStackTrace()
+        } finally {
+            try {
+                fileWriter!!.flush()
+                fileWriter.close()
+            } catch (e: IOException) {
+                println("Flushing/closing error!")
+                e.printStackTrace()
+            }
+        }
+        println(File(this.applicationContext.filesDir.toString()).listFiles().size)
+        textView.text = File(this.applicationContext.filesDir.toString()).listFiles().size.toString()
     }
 }

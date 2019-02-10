@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Accelerometer</string>
+    <string name="title_activity_send_files">SendFilesActivity</string>
 </resources>

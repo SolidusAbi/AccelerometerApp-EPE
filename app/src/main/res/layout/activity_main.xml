@@ -11,21 +11,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/sendEmailButton"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:id="@+id/accelerometer_data"
+            app:layout_constraintTop_toBottomOf="@+id/activities_layout" android:id="@+id/accelerometer_data"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_bias="0.715"/>
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="368dp"
-            android:layout_height="231dp" tools:layout_editor_absoluteY="8dp" tools:layout_editor_absoluteX="8dp"
+    <Button
+            android:text="Enviar ficheros"
+            android:layout_width="395dp"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="8dp" android:id="@+id/sendEmailButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/accelerometer_data"
+            android:layout_marginBottom="0dp"/>
+
+    <LinearLayout
+            android:id="@+id/activities_layout"
+            android:orientation="vertical"
+            android:layout_width="368dp"
+            android:layout_height="206dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toTopOf="@+id/accelerometer_data">
 
 
         <TextView
@@ -41,19 +53,19 @@
                 android:orientation="horizontal"
                 android:id="@+id/radioActivityGroup">
 
-                <RadioButton
-                        android:text="Caminar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:id="@+id/radioButton0" android:layout_weight="1"
-                        />
-                <RadioButton
-                        android:text="Correr"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:id="@+id/radioButton1" android:layout_weight="1"/>
-                <RadioButton
-                        android:text="Subir Escaleras"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:id="@+id/radioButton2" android:layout_weight="1"/>
+            <RadioButton
+                    android:text="Caminar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/radioButton0" android:layout_weight="1"
+            />
+            <RadioButton
+                    android:text="Correr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/radioButton1" android:layout_weight="1"/>
+            <RadioButton
+                    android:text="Subir Escaleras"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/radioButton2" android:layout_weight="1"/>
 
         </RadioGroup>
         <LinearLayout
@@ -74,6 +86,11 @@
                 android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/textView"/>
+
     </LinearLayout>
+
+    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                          android:id="@+id/guideline" app:layout_constraintGuide_begin="20dp"
+                                          android:orientation="vertical"/>
 
 </android.support.constraint.ConstraintLayout>
