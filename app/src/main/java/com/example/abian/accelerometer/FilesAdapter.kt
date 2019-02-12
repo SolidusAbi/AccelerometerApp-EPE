@@ -68,7 +68,7 @@ class FilesAdapter(filenameDirectory:String, val sendFilesInterface: SendFilesIn
         if (selectedFiles.size < 1)
             return
 
-        val selectedIdIteration = selectedFiles.listIterator();
+        val selectedIdIteration = selectedFiles.listIterator()
 
         while (selectedIdIteration.hasNext()) {
             val selectedItemID = selectedIdIteration.next()
@@ -88,5 +88,25 @@ class FilesAdapter(filenameDirectory:String, val sendFilesInterface: SendFilesIn
             SendFilesActivity.filesSelected = false
             filenames = File(this.fileDirectory).listFiles()
         }
+    }
+
+    fun getSelectedActivitiesFiles(): MutableList<File> {
+        val selectedFiles: MutableList<File> = ArrayList()
+        val selectedFilesIterator = this.selectedFiles.listIterator()
+
+        while (selectedFilesIterator.hasNext()){
+            val selectedFile =selectedFilesIterator.next()
+            val filesIterator = filenames.iterator()
+
+            while (filesIterator.hasNext()) {
+                val filename = filesIterator.next()
+
+                if (selectedFile == filename.name) {
+                    selectedFiles.add(filename)
+                }
+            }
+        }
+
+        return selectedFiles
     }
 }

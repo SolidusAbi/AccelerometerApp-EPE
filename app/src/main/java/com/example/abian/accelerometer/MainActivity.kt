@@ -1,23 +1,32 @@
 package com.example.abian.accelerometer
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.UUID.randomUUID
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
+
+private const val PERMISSION_REQUEST = 101
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
 
@@ -32,6 +41,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private val CSV_HEADER = "x,y,z"
 
+    private var permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
 
     }
@@ -41,6 +52,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 "y = ${event.values[1]}\n\n" +
                 "z = ${event.values[2]}"
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +69,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val prueba = file.size
 
         this.startButton.setOnClickListener{
+            if (!checkPermission(this, permissions)) {
+                requestPermissions(permissions, PERMISSION_REQUEST)
+            }
+
             var result = ""
             var checkedValue : Int = radioActivityGroup.checkedRadioButtonId
             if (checkedValue != -1)
@@ -87,6 +103,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
         this.sendEmailButton.setOnClickListener{
+            //val intent: Intent = Intent( this, SendFilesActivity::class.java)
             val intent: Intent = Intent( this, SendFilesActivity::class.java)
             this.startActivity(intent)
         }
@@ -103,10 +120,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
 
-
         var fileWriter : FileWriter? = null
         try {
-            val file = File(this.applicationContext.filesDir.toString(), filename)
+            //val file = File(this.applicationContext.filesDir.toString(), filename)
+            val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+            //val path = Environment.getExternalStorageDirectory()
+            val a = path.mkdir() // Just be sure that directory exists
+            val file = File(path, filename)
+
             fileWriter = FileWriter(file)
             fileWriter.append(CSV_HEADER)
             fileWriter.append('\n')
@@ -129,7 +150,38 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 e.printStackTrace()
             }
         }
-        println(File(this.applicationContext.filesDir.toString()).listFiles().size)
         textView.text = File(this.applicationContext.filesDir.toString()).listFiles().size.toString()
+    }
+
+    fun checkPermission(context: Context, permissionsArray: Array<String>): Boolean{
+        var allSuccess = true
+        for (i in permissionsArray.indices){
+            if (checkCallingOrSelfPermission(permissionsArray[i]) == PackageManager.PERMISSION_DENIED) {
+                allSuccess = false
+                break
+            }
+        }
+        return allSuccess
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST){
+            var allSuccess = true
+            for (i in permissions.indices){
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED){
+                    allSuccess = false
+                    var requestAgain = shouldShowRequestPermissionRationale(permissions[i])
+                    if (requestAgain){
+                        Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Go to Settings and enable the permission", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            if (allSuccess)
+                Toast.makeText(applicationContext, "Permission granted", Toast.LENGTH_SHORT).show()
+        }
+
     }
 }
