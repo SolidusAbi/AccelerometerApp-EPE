@@ -98,10 +98,10 @@ class SendFilesActivity() : AppCompatActivity(), SendFilesInterface {
                 }
 
                 R.id.sendEmailAction -> {
-                    val intent = Intent(Intent.ACTION_SEND)
+                    val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
 
                     val selectedFiles = fileAdapter.getSelectedActivitiesFiles()
-                    val uriFiles: MutableList<Uri> = ArrayList()
+                    val uriFiles: ArrayList<Uri> = ArrayList()
 
                     val filesIt = selectedFiles.listIterator()
                     while(filesIt.hasNext()){
@@ -109,11 +109,12 @@ class SendFilesActivity() : AppCompatActivity(), SendFilesInterface {
                         uriFiles.add(path)
                     }
 
-                    intent.type = "vnd.android.cursor.dir/email"
+
+                    intent.type = "plain/text"
                     intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("solidusabi@gmail.com"))
                     intent.putExtra(Intent.EXTRA_SUBJECT,"test email!")
                     intent.putExtra(Intent.EXTRA_TEXT, "Email body")
-                    intent.putExtra(Intent.EXTRA_STREAM, uriFiles[0])
+                    intent.putExtra(Intent.EXTRA_STREAM, uriFiles)
 
                     startActivity(Intent.createChooser(intent, "Send email..."))
                 }

@@ -90,8 +90,8 @@ class FilesAdapter(filenameDirectory:String, val sendFilesInterface: SendFilesIn
         }
     }
 
-    fun getSelectedActivitiesFiles(): MutableList<File> {
-        val selectedFiles: MutableList<File> = ArrayList()
+    fun getSelectedActivitiesFiles(): ArrayList<File> {
+        val selectedFiles: ArrayList<File> = ArrayList()
         val selectedFilesIterator = this.selectedFiles.listIterator()
 
         while (selectedFilesIterator.hasNext()){
