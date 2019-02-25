@@ -16,9 +16,6 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_send_files.*
 import java.io.File
 
-interface SendFilesInterface {
-    fun sendFilesInterface (size : Int)
-}
 
 class SendFilesActivity() : AppCompatActivity(), SendFilesInterface {
 
@@ -111,9 +108,9 @@ class SendFilesActivity() : AppCompatActivity(), SendFilesInterface {
 
 
                     intent.type = "plain/text"
-                    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("solidusabi@gmail.com"))
-                    intent.putExtra(Intent.EXTRA_SUBJECT,"test email!")
-                    intent.putExtra(Intent.EXTRA_TEXT, "Email body")
+                    //intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("solidusabi@gmail.com"))
+                    intent.putExtra(Intent.EXTRA_SUBJECT,"[EPE] Datos acelerometro")
+                    intent.putExtra(Intent.EXTRA_TEXT, "Este correo contiene ficheros CSV extraídos del sensor del móvil")
                     intent.putExtra(Intent.EXTRA_STREAM, uriFiles)
 
                     startActivity(Intent.createChooser(intent, "Send email..."))

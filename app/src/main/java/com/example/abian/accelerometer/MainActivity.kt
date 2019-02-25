@@ -33,7 +33,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
 
-    private val CSV_HEADER = "x,y,z"
+    private val CSV_HEADER = "timestamp,x,y,z"
+    private var startTimestamp: Long = 0
     private lateinit var fileWriter: FileWriter
 
     private val PERMISSION_REQUEST = 101
@@ -48,10 +49,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 "y = ${event.values[1]}\n\n" +
                 "z = ${event.values[2]}"
 
-        val csvContent: String = "${event!!.values[0]},${event!!.values[1]},${event!!.values[2]}"
+        val currentTimestamp = System.currentTimeMillis() - this.startTimestamp
+        val csvContent: String = "${currentTimestamp},${event.values[0]},${event.values[1]},${event.values[2]}\n"
 
         this.fileWriter.append(csvContent)
-        this.fileWriter.append('\n')
+        //this.fileWriter.append('\n')
     }
 
 
@@ -80,7 +82,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                     this.stopButton.isEnabled = true
 
                     result += "Selected ${this.currentActivity.text}"
-                    textView.text = result
 
                     sensorManager.registerListener(
                         this,
@@ -88,6 +89,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                         SensorManager.SENSOR_DELAY_NORMAL
                     )
 
+                    this.startTimestamp = System.currentTimeMillis()
                     createFile(this.currentActivity.text)
                 }
             }
@@ -107,7 +109,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
 
             sensorManager.unregisterListener(this)
-            accelerometer_data.text = "Hello World"
+            accelerometer_data.text = ""
         }
 
         this.sendEmailButton.setOnClickListener{
@@ -159,10 +161,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val uuid = randomUUID().toString()
         val replace = activity.replace("\\s".toRegex(), "")
         val filename = "${replace}_$uuid.csv"
-        textView.text = Environment.getExternalStorageDirectory().toString()
 
-
-        //var fileWriter : FileWriter? = null
         try {
             val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
             path.mkdir() // Just be sure that directory exists
@@ -172,22 +171,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             this.fileWriter.append(CSV_HEADER)
             this.fileWriter.append('\n')
 
-//            this.fileWriter.append("Hello world!")
-//            this.fileWriter.append('\n')
-
             println("Write CSV successfully!")
         } catch (e: Exception) {
             println("Writing CSV error!")
             e.printStackTrace()
         }
-//        finally {
-//            try {
-//                this.fileWriter.flush()
-//                this.fileWriter.close()
-//            } catch (e: IOException) {
-//                println("Flushing/closing error!")
-//                e.printStackTrace()
-//            }
-//        }
     }
 }

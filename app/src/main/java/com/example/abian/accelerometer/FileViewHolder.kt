@@ -5,10 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 
-interface FileViewHolderListener {
-    fun onLongTap(index : Int)
-    fun onTap(index : Int)
-}
 
 class FileViewHolder(val view: View, val r_tap: FileViewHolderListener): RecyclerView.ViewHolder(view),
     View.OnLongClickListener, View.OnClickListener {
