@@ -46,11 +46,15 @@ class FilesAdapter(filenameDirectory:String, val sendFilesInterface: SendFilesIn
             //if item is selected then,set foreground color of FrameLayout.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 holder.layout.foreground = ColorDrawable(0x50FF4081)
+            } else {
+                holder.view.filename.setTextColor(Color.RED)
             }
         } else {
             //else remove selected item color.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 holder.layout.foreground = ColorDrawable(Color.TRANSPARENT)
+            } else {
+                holder.view.filename.setTextColor(Color.BLACK)
             }
         }
     }
