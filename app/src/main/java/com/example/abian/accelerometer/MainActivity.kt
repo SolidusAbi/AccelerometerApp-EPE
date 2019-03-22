@@ -8,6 +8,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -81,7 +82,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         this.startButton.setOnClickListener{
             if (!checkPermission(this, permissions)) {
-                requestPermissions(permissions, PERMISSION_REQUEST)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(permissions, PERMISSION_REQUEST)
+                }
             } else {
                 var checkedValue: Int = radioActivityGroup.checkedRadioButtonId
                 if (checkedValue != -1) {
@@ -163,12 +166,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
 
+    /**
+     * In android before from Marshmallow (6), this function always return 'true'
+     */
     private fun checkPermission(context: Context, permissionsArray: Array<String>): Boolean{
         var allSuccess = true
-        for (i in permissionsArray.indices){
-            if (checkCallingOrSelfPermission(permissionsArray[i]) == PackageManager.PERMISSION_DENIED) {
-                allSuccess = false
-                break
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (i in permissionsArray.indices) {
+                if (checkCallingOrSelfPermission(permissionsArray[i]) == PackageManager.PERMISSION_DENIED) {
+                    allSuccess = false
+                    break
+                }
             }
         }
         return allSuccess
