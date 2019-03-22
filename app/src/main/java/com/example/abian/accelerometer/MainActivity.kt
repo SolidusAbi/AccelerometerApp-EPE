@@ -11,10 +11,8 @@ import android.hardware.SensorManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.widget.Button
-import android.widget.RadioGroup
-import android.widget.RadioButton
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.UUID.randomUUID
 import java.io.File
@@ -26,6 +24,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var radioActivityGroup: RadioGroup
     private lateinit var currentActivity: RadioButton
+    private lateinit var otherActivityName: EditText
+    private lateinit var sensorDelayFastestCheckbox: CheckBox
 
     private lateinit var startButton: Button
     private lateinit var stopButton: Button
@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val csvContent: String = "${currentTimestamp},${event.values[0]},${event.values[1]},${event.values[2]}\n"
 
         this.fileWriter.append(csvContent)
-        //this.fileWriter.append('\n')
     }
 
 
@@ -62,35 +61,54 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_main)
 
         this.radioActivityGroup = findViewById(R.id.radioActivityGroup)
+        this.otherActivityName = findViewById(R.id.activityNameText)
+        this.sensorDelayFastestCheckbox = findViewById(R.id.sensorDelayFastestCheckbox)
         this.startButton = findViewById(R.id.startButton)
         this.stopButton = findViewById(R.id.stopButton)
         this.sendEmailButton = findViewById(R.id.sendEmailButton)
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
+        this.radioActivityGroup.setOnCheckedChangeListener(
+            RadioGroup.OnCheckedChangeListener { _, checkedId ->
+                if (checkedId == R.id.otherActivity){
+                    this.otherActivityName.visibility = View.VISIBLE
+                } else {
+                    this.otherActivityName.visibility = View.GONE
+                }
+            }
+        )
+
         this.startButton.setOnClickListener{
             if (!checkPermission(this, permissions)) {
                 requestPermissions(permissions, PERMISSION_REQUEST)
             } else {
-
-                var result = ""
                 var checkedValue: Int = radioActivityGroup.checkedRadioButtonId
                 if (checkedValue != -1) {
                     this.currentActivity = findViewById(checkedValue)
+                    var activityName = this.currentActivity.text
+                    if (checkedValue == R.id.otherActivity)
+                        activityName = findViewById<EditText>(R.id.activityNameText).text
+
                     this.startButton.isEnabled = false
                     this.sendEmailButton.isEnabled = false
                     this.stopButton.isEnabled = true
 
-                    result += "Selected ${this.currentActivity.text}"
+                    Toast.makeText(applicationContext,activityName,
+                        Toast.LENGTH_SHORT).show()
 
+                    var sensorSpeed = SensorManager.SENSOR_DELAY_NORMAL
+                    if (this.sensorDelayFastestCheckbox.isChecked) {
+                        sensorSpeed = SensorManager.SENSOR_DELAY_FASTEST
+                    }
                     sensorManager.registerListener(
                         this,
                         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                        SensorManager.SENSOR_DELAY_NORMAL
+                        sensorSpeed
                     )
 
                     this.startTimestamp = System.currentTimeMillis()
-                    createFile(this.currentActivity.text)
+                    createFile(activityName)
                 }
             }
         }
