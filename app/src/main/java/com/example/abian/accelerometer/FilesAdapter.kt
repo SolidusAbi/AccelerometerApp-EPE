@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.file_row.view.*
 import java.io.File
 import android.graphics.Color
+import android.os.Build
 
 class FilesAdapter(filenameDirectory:String, val sendFilesInterface: SendFilesInterface): RecyclerView.Adapter<FileViewHolder>(), FileViewHolderListener{
 
@@ -43,10 +44,14 @@ class FilesAdapter(filenameDirectory:String, val sendFilesInterface: SendFilesIn
 
         if (selectedFiles.contains(filename)) {
             //if item is selected then,set foreground color of FrameLayout.
-            holder.layout.foreground = ColorDrawable(0x50FF4081)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                holder.layout.foreground = ColorDrawable(0x50FF4081)
+            }
         } else {
             //else remove selected item color.
-            holder.layout.foreground = ColorDrawable(Color.TRANSPARENT)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                holder.layout.foreground = ColorDrawable(Color.TRANSPARENT)
+            }
         }
     }
 

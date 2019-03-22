@@ -37,7 +37,6 @@ class SendFilesActivity() : AppCompatActivity(), SendFilesInterface {
         this.filesDirectory.mkdir()
 
         filesView.layoutManager = LinearLayoutManager(this)
-        //fileAdapter = FilesAdapter(this.applicationContext.filesDir.toString(), this)
         fileAdapter = FilesAdapter(filesDirectory.toString(), this)
         filesView.adapter = fileAdapter
     }
@@ -108,7 +107,6 @@ class SendFilesActivity() : AppCompatActivity(), SendFilesInterface {
 
 
                     intent.type = "plain/text"
-                    //intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("solidusabi@gmail.com"))
                     intent.putExtra(Intent.EXTRA_SUBJECT,"[EPE] Datos acelerometro")
                     intent.putExtra(Intent.EXTRA_TEXT, "Este correo contiene ficheros CSV extraídos del sensor del móvil")
                     intent.putExtra(Intent.EXTRA_STREAM, uriFiles)
