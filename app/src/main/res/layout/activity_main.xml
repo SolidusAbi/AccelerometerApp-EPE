@@ -29,7 +29,7 @@
             android:id="@+id/activities_layout"
             android:orientation="vertical"
             android:layout_width="355dp"
-            android:layout_height="wrap_content"
+            android:layout_height="161dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +97,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/sensorDelayFastestCheckbox"
                 android:layout_weight="1"/>
+        <CheckBox
+                android:text="Raw Data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/rawDataCheckbox"/>
 
     </LinearLayout>
 

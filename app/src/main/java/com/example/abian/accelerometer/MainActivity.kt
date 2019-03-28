@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var currentActivity: RadioButton
     private lateinit var otherActivityName: EditText
     private lateinit var sensorDelayFastestCheckbox: CheckBox
+    private lateinit var rawDataCheckbox: CheckBox
 
     private lateinit var startButton: Button
     private lateinit var stopButton: Button
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         this.radioActivityGroup = findViewById(R.id.radioActivityGroup)
         this.otherActivityName = findViewById(R.id.activityNameText)
         this.sensorDelayFastestCheckbox = findViewById(R.id.sensorDelayFastestCheckbox)
+        this.rawDataCheckbox = findViewById(R.id.rawDataCheckbox)
         this.startButton = findViewById(R.id.startButton)
         this.stopButton = findViewById(R.id.stopButton)
         this.sendEmailButton = findViewById(R.id.sendEmailButton)
@@ -100,13 +102,18 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                     Toast.makeText(applicationContext,activityName,
                         Toast.LENGTH_SHORT).show()
 
+                    var sensor = Sensor.TYPE_LINEAR_ACCELERATION
                     var sensorSpeed = SensorManager.SENSOR_DELAY_NORMAL
-                    if (this.sensorDelayFastestCheckbox.isChecked) {
+
+                    if (this.sensorDelayFastestCheckbox.isChecked)
                         sensorSpeed = SensorManager.SENSOR_DELAY_FASTEST
-                    }
+
+                    if (this.rawDataCheckbox.isChecked)
+                        sensor = Sensor.TYPE_ACCELEROMETER
+
                     sensorManager.registerListener(
                         this,
-                        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                        sensorManager.getDefaultSensor(sensor),
                         sensorSpeed
                     )
 
