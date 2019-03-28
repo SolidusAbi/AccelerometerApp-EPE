@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.UUID.randomUUID
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         this.radioActivityGroup = findViewById(R.id.radioActivityGroup)
         this.otherActivityName = findViewById(R.id.activityNameText)
